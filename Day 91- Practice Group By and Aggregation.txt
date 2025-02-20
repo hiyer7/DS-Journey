@@ -1,0 +1,107 @@
+Q1. Product Sales I
+select p.product_name, s.year, s.price
+from sales s
+inner join
+product p
+using (product_id)
+order by s.year, p.product_name
+
+Q2. Last Month's Friendly Movies
+select distinct(c.title)#, c.kids_content, c.content_type, year(t.program_date) 
+from Content c
+inner join
+tvprogram t
+using (content_id)
+where c.kids_content = 'Y'
+and   c.content_type = 'Movies'
+and   year(t.program_date) = 2020
+order by title;
+
+Q3. African Cities
+select ct.name
+from city ct 
+inner join
+country cnt 
+on cnt.code = ct.countrycode
+where cnt.continent = 'Africa'
+order by ct.name
+
+Q4. Department (No emp)
+select d.department_id, d.department_name
+from employees e
+right join
+departments d
+using (department_id)
+where e.employee_id is null
+order by d.department_id;
+
+Q5. Bonus less than 1000
+select e.name, b.bonus
+from employee e
+left join 
+bonus b
+using (empid)
+where b.bonus is null
+or b.bonus < 1000
+order by b.bonus
+
+Q6. Handles No Customers
+select e.employeeNumber, e.firstname, e.lastname
+from employees e 
+left join
+customers c
+on c.salesRepEmployeeNumber = e.employeeNumber
+where c.salesRepEmployeeNumber is null
+order by e.employeeNumber;
+
+Q7. Departments & Employees
+select e.employee_id, e.first_name, e.last_name, d.department_id, d.department_name
+from departments d
+left join
+employees e
+using (department_id)
+Where d.department_id is not null
+union distinct
+select e.employee_id, e.first_name, e.last_name, e.department_id, d.department_name
+from departments d
+right join
+employees e
+using (department_id)
+Where e.department_id is not null
+order by employee_id, department_id, first_name
+
+Q8. Analysis of Sales
+select distinct s.buyer_id#, p.product_id, p.product_name#s.buyer_id
+from Sales s
+inner join 
+Product P
+using (product_id)
+where buyer_id not in
+(select s.buyer_id
+from Sales s
+inner join 
+Product P
+using (product_id)
+where p.product_name = 'iPhone')
+and  p.product_name  = 'S8' #, 'iPhone')
+order by s.buyer_id
+
+
+Additional Assignments
+Q1. Product Description
+select p.productCode, p.productName, pl.textDescription
+from products p
+inner join
+productlines pl 
+using (productline)
+order by productCode
+
+Q2. Ad-Free Sessions
+select distinct p.session_id
+from playback p
+left join
+Ads a
+using (customer_id)
+where a.timestamp not between p.start_time and p.end_time
+order by session_id
+
